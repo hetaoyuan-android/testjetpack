@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">testjetpack</string>
+    <string name="description">Description</string>
+    <string name="description2">Description</string>
+    <string name="button">Button</string>
+    <string name="textview1">team A</string>
+    <string name="textview2">team B</string>
+    <string name="scoreA">0</string>
+    <string name="scoreB">0</string>
+    <string name="button1">+1</string>
+    <string name="button2">+2</string>
+    <string name="button3">+3</string>
+    <string name="undoButton">undo</string>
+    <string name="resetButton">reset</string>
+    <string name="photo_tag">%d / %d</string>
+</resources>
