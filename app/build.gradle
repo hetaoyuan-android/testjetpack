@@ -6,6 +6,14 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+
+    viewBinding {
+        enabled true
+    }
+
     defaultConfig {
         applicationId "com.yuan.testjetpack"
         minSdkVersion 19
@@ -58,6 +66,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'com.google.android.material:material:1.2.0-alpha02'
+    def fragment_version = "1.2.2"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    def work_version = "2.4.0"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
 
 
 

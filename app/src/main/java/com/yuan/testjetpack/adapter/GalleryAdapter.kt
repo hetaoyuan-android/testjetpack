@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.navigation.findNavController
-import androidx.paging.DataSource
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,15 +16,21 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.yuan.testjetpack.R
 import com.yuan.testjetpack.bean.PhotoItem
-import io.supercharge.shimmerlayout.ShimmerLayout
+import com.yuan.testjetpack.viewmodel.DATA_STATUS_CAN_LOAD_MORE
+import com.yuan.testjetpack.viewmodel.DATA_STATUS_NETWORK_ERROR
+import com.yuan.testjetpack.viewmodel.DATA_STATUS_NO_MORE
+import com.yuan.testjetpack.viewmodel.GalleryViewModel
+import kotlinx.android.synthetic.main.gallery_footer.view.*
 import kotlinx.android.synthetic.main.gallery_item.view.*
 
-class GalleryAdapter : ListAdapter<PhotoItem, MyViewHolder>(DIFFCALLBACK) {
+class GalleryAdapter(val galleryViewModel: GalleryViewModel) : ListAdapter<PhotoItem, MyViewHolder>(DIFFCALLBACK) {
 
     companion object {
         const val NORMAL_VIEW_TYPE = 0
         const val FOOTER_VIEW_TYPE = 1
     }
+
+    var footerViewStatus = DATA_STATUS_CAN_LOAD_MORE
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val holder: MyViewHolder
@@ -50,6 +53,11 @@ class GalleryAdapter : ListAdapter<PhotoItem, MyViewHolder>(DIFFCALLBACK) {
                             false
                     ).also {
                         (it.layoutParams as StaggeredGridLayoutManager.LayoutParams).isFullSpan = true
+                        it.setOnClickListener { view ->
+                            view.progressBar2.visibility = View.VISIBLE
+                            view.textView6.text = "正在加载"
+                            galleryViewModel.fetchData()
+                        }
                     }
             )
         }
@@ -68,6 +76,25 @@ class GalleryAdapter : ListAdapter<PhotoItem, MyViewHolder>(DIFFCALLBACK) {
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         if (position == itemCount -1) {
+            with(holder.itemView) {
+                when(footerViewStatus) {
+                    DATA_STATUS_CAN_LOAD_MORE -> {
+                        progressBar2.visibility = View.VISIBLE
+                        textView6.text = "正在加载"
+                        isClickable = false
+                    }
+                    DATA_STATUS_NO_MORE -> {
+                        progressBar2.visibility = View.GONE
+                        textView6.text = "全部加载完毕"
+                        isClickable = false
+                    }
+                    DATA_STATUS_NETWORK_ERROR -> {
+                        progressBar2.visibility = View.GONE
+                        textView6.text = "网络故障,稍后重试"
+                        isClickable = true
+                    }
+                }
+            }
             return
         }
 
@@ -98,11 +125,11 @@ class GalleryAdapter : ListAdapter<PhotoItem, MyViewHolder>(DIFFCALLBACK) {
 
     object DIFFCALLBACK : DiffUtil.ItemCallback<PhotoItem>() {
         override fun areItemsTheSame(oldItem: PhotoItem, newItem: PhotoItem): Boolean {
-            return oldItem === newItem
+            return oldItem.photoId === newItem.photoId
         }
 
         override fun areContentsTheSame(oldItem: PhotoItem, newItem: PhotoItem): Boolean {
-            return oldItem.photoId == newItem.photoId
+            return oldItem == newItem
         }
     }
 
