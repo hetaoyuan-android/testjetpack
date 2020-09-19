@@ -9,21 +9,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ViewBindingActivity"></activity>
-        <activity android:name=".activity.ViewPagerActivity"></activity>
-        <activity
-            android:name=".activity.ImageActivity"
-            android:theme="@style/Theme.AppCompat.Light">
+        <activity android:name=".activity.ServicesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.VideoViewActivity">
+
+        </activity>
+        <activity android:name=".activity.MotionEditorActivity" />
+        <activity android:name=".activity.ViewBindingActivity" />
+        <activity android:name=".activity.ViewPagerActivity" />
+        <activity
+            android:name=".activity.ImageActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity android:name=".activity.PagingActivity" />
         <activity android:name=".NavigationBottomActivity" />
         <activity android:name=".BasketBallActivity" />
         <activity android:name=".MainActivity" />
+
+        <service
+            android:name=".services.MyService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
